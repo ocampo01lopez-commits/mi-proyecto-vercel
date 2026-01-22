@@ -1,65 +1,115 @@
-import Image from "next/image";
+"use client";
+import { useEffect } from "react";
 
 export default function Home() {
+  useEffect(() => {
+    // Esto asegura que el JS se ejecute solo en el cliente
+    require("./app_script.js");
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <div id="toast-container"></div>
+      <button id="toggleTheme" title="Cambiar tema">🌙</button>
+
+      <header>
+        <div className="header-content">
+          <h1>💰 Finanzas PRO</h1>
+          <p className="subtitle">Control total de tu dinero</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+        <input type="search" id="searchInput" placeholder="🔍 Buscar movimiento..." />
+      </header>
+
+      <main>
+        <section className="dashboard-cards">
+          <div className="card income">
+            <h3>Ingresos</h3>
+            <p id="totalIncome">L 0.00</p>
+          </div>
+          <div className="card expense">
+            <h3>Gastos</h3>
+            <p id="totalExpense">L 0.00</p>
+          </div>
+          <div className="card savings">
+            <h3>Balance Total</h3>
+            <p id="totalSavings">L 0.00</p>
+          </div>
+        </section>
+
+        <section className="form-section">
+          <form id="transactionForm" autoComplete="off">
+            <div className="form-group">
+              <label>Tipo</label>
+              <select id="type">
+                <option value="income">➕ Ingreso</option>
+                <option value="expense">➖ Gasto</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Descripción</label>
+              <input type="text" id="description" placeholder="Ej: Sueldo..." required minLength={3} />
+            </div>
+            <div className="form-group">
+              <label>Monto</label>
+              <input type="number" id="amount" placeholder="0.00" required step="0.01" min="0.01" />
+            </div>
+            <div className="form-group">
+              <label>Fecha</label>
+              <input type="date" id="dateInput" required />
+            </div>
+            <div className="form-group">
+              <label>Categoría</label>
+              <select id="category">
+                <option value="Ahorro">💰 Ahorro</option>
+                <option value="Comida">🍔 Comida</option>
+                <option value="Transporte">🚗 Transporte</option>
+                <option value="Servicios">💡 Servicios</option>
+                <option value="Entretenimiento">🎮 Ocio</option>
+                <option value="Salud">🏥 Salud</option>
+                <option value="Casa">🏠 Casa</option>
+                <option value="Otros">📦 Otros</option>
+              </select>
+            </div>
+            <button type="submit" id="submitBtn">Agregar Movimiento</button>
+            <button type="button" id="cancelEditBtn" className="cancel-btn" hidden>Cancelar</button>
+          </form>
+        </section>
+
+        <section className="charts-container">
+          <div className="chart-box">
+            <h4>Distribución de Gastos</h4>
+            <div className="canvas-wrapper"><canvas id="categoryChart"></canvas></div>
+          </div>
+          <div className="chart-box">
+            <h4>Evolución del Balance</h4>
+            <div className="canvas-wrapper"><canvas id="trendChart"></canvas></div>
+          </div>
+        </section>
+
+        <section className="history-section">
+          <div className="table-header">
+            <h2>Historial Reciente</h2>
+            <button id="exportBtn" className="secondary-btn">⬇ Exportar CSV</button>
+          </div>
+          <div className="table-responsive">
+            <table id="transactionTable">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Descripción</th>
+                  <th>Categoría</th>
+                  <th>Monto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
       </main>
-    </div>
+      
+      {/* Script externo para Chart.js */}
+      <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    </>
   );
 }
