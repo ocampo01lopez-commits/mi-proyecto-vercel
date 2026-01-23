@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <>
-      {/* PANTALLAS DE LOGIN Y CAMBIO DE CLAVE (Iguales a las anteriores) */}
+      {/* PANTALLA DE LOGIN */}
       <div id="login-screen" className="auth-overlay">
         <div className="auth-card">
           <h2>🔐 Acceso Finanzas PRO</h2>
@@ -21,9 +21,11 @@ export default function Home() {
         </div>
       </div>
 
+      {/* MODAL DE CAMBIO DE CLAVE PERSONAL */}
       <div id="password-modal" className="auth-overlay" style={{ display: 'none' }}>
         <div className="auth-card">
           <h2>🆕 Nueva Contraseña</h2>
+          <p>Crea una clave personal para tu cuenta. Se notificará a Josue.</p>
           <form id="changePassForm">
             <input type="password" id="newPass" placeholder="Nueva contraseña" required minLength={3} />
             <input type="password" id="confirmPass" placeholder="Confirmar contraseña" required minLength={3} />
@@ -33,47 +35,86 @@ export default function Home() {
         </div>
       </div>
 
-      {/* CONTENIDO PRINCIPAL */}
+      {/* DASHBOARD PRINCIPAL CON TU DISEÑO */}
       <div id="app-content" style={{ display: 'none' }}>
-        <button id="logoutBtn">🚪 Salir</button>
-        <header>
-          <h1>💰 Finanzas PRO</h1>
-          <p>Bienvenido, <span id="userNameDisplay"></span></p>
+        <header className="main-header">
+          <div className="header-left">
+            <div className="logo-section">
+              <span className="logo-icon">💰</span>
+              <h1>Finanzas PRO</h1>
+            </div>
+            <p className="welcome-text">Bienvenido, <span id="userNameDisplay"></span></p>
+          </div>
+          <div className="header-right">
+            <div className="search-container">
+              <input type="search" id="searchInput" placeholder="🔍 Buscar movimiento..." />
+            </div>
+            <button id="logoutBtn" className="btn-salir">🚪 Salir</button>
+          </div>
         </header>
 
-        <main>
-          {/* Tarjetas y Gráficas (Se mantienen igual) */}
+        <main className="dashboard-container">
           <section className="dashboard-cards">
             <div className="card income"><h3>Ingresos</h3><p id="totalIncome">L 0.00</p></div>
             <div className="card expense"><h3>Gastos</h3><p id="totalExpense">L 0.00</p></div>
-            <div className="card savings"><h3>Balance</h3><p id="totalSavings">L 0.00</p></div>
+            <div className="card balance"><h3>Balance Total</h3><p id="totalSavings">L 0.00</p></div>
           </section>
 
-          <section className="charts-container">
-            <div className="chart-box"><canvas id="categoryChart"></canvas></div>
-            <div className="chart-box"><canvas id="trendChart"></canvas></div>
+          <section className="charts-grid">
+            <div className="chart-box">
+              <h4>Distribución de Gastos</h4>
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <div className="chart-box">
+              <h4>Ingresos vs Gastos</h4>
+              <canvas id="trendChart"></canvas>
+            </div>
           </section>
 
-          {/* SECCIÓN SECRETA DEL MANAGER (Solo visible para Josue) */}
-          <section id="manager-panel" style={{ display: 'none', marginTop: '40px', padding: '20px', border: '2px dashed #4f46e5', borderRadius: '10px' }}>
-            <h3 style={{ color: '#4f46e5' }}>🔑 Panel Maestro de Contraseñas</h3>
-            <table style={{ width: '100%', marginTop: '10px' }}>
+          {/* PANEL MAESTRO SECRETO (SOLO PARA JOSUE) */}
+          <section id="manager-panel" style={{ display: 'none', margin: '25px 0' }}>
+            <div className="panel-maestro">
+              <h3>🔑 Panel Maestro de Recuperación</h3>
+              <div className="table-container">
+                <table className="mini-table">
+                  <thead>
+                    <tr><th>Usuario</th><th>Clave Actual</th><th>Estado</th></tr>
+                  </thead>
+                  <tbody id="passwords-table-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          {/* FORMULARIO DE ENTRADA */}
+          <section className="form-container">
+            <form id="transactionForm" className="horizontal-form">
+              <select id="type">
+                <option value="income">➕ Ingreso</option>
+                <option value="expense">➖ Gasto</option>
+              </select>
+              <input type="text" id="description" placeholder="Descripción" required />
+              <input type="number" id="amount" placeholder="0.00" required step="0.01" />
+              <input type="date" id="dateInput" required />
+              <select id="category">
+                <option value="Comida">🍔 Comida</option>
+                <option value="Servicios">💡 Servicios</option>
+                <option value="Transporte">🚗 Transporte</option>
+                <option value="Salud">🏥 Salud</option>
+                <option value="Otros">📦 Otros</option>
+              </select>
+              <button type="submit" id="submitBtn">Agregar Movimiento</button>
+            </form>
+          </section>
+
+          <section className="history-container">
+            <table id="transactionTable" className="main-table">
               <thead>
-                <tr><th>Usuario</th><th>Contraseña Actual</th></tr>
+                <tr><th>Fecha</th><th>Detalle</th><th>Categoría</th><th>Monto</th><th>Acciones</th></tr>
               </thead>
-              <tbody id="passwords-table-body">
-                {/* Aquí aparecerán las claves */}
-              </tbody>
+              <tbody></tbody>
             </table>
           </section>
-
-          {/* Formulario de movimientos y Tabla (Iguales) */}
-          <form id="transactionForm" className="main-form" style={{ marginTop: '20px' }}>
-             <input type="text" id="description" placeholder="Descripción" required />
-             <input type="number" id="amount" placeholder="Monto" required />
-             <input type="date" id="dateInput" required />
-             <button type="submit">Agregar</button>
-          </form>
         </main>
       </div>
       <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
