@@ -9,7 +9,7 @@ export default function Home() {
     <>
       <div id="login-screen" className="lock-screen">
         <div style={{background:'white', padding:'40px', borderRadius:'20px', width:'320px', textAlign:'center'}}>
-          <h2 style={{color:'#1e293b'}}>🔐 Finanzas Josue</h2>
+          <h2 style={{color:'#1e293b'}}>🔐 Finanzas PRO</h2>
           <form id="loginForm">
             <input type="text" id="loginUser" placeholder="Usuario" required style={{width:'100%', padding:'10px', marginBottom:'10px', color:'black'}} />
             <input type="password" id="loginPass" placeholder="Contraseña" required style={{width:'100%', padding:'10px', marginBottom:'20px', color:'black'}} />
