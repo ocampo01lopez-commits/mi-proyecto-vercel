@@ -1,3 +1,102 @@
+:root {
+  --fondo: #f8fafc;
+  --tarjeta: #ffffff;
+  --texto: #1e293b;
+  --borde: #e2e8f0;
+}
+
+body.dark-mode {
+  --fondo: #0f172a;
+  --tarjeta: #1e293b;
+  --texto: #f8fafc;
+  --borde: #334155;
+}
+
+body { background: var(--fondo); color: var(--texto); margin: 0; font-family: 'Inter', sans-serif; transition: 0.3s; }
+
+.app-wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+/* CABECERA Y LUNA */
+.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.theme-btn { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 50%; width: 45px; height: 45px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; }
+
+/* TARJETAS DE BALANCE */
+.balance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+.b-card { background: var(--tarjeta); padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.b-card.in { border-top: 4px solid #10b981; }
+.b-card.ex { border-top: 4px solid #ef4444; }
+.b-card.ba { border-top: 4px solid #3b82f6; }
+
+/* FORMULARIO EQUITATIVO EN UNA FILA */
+.entry-form {
+  display: flex; gap: 10px; background: var(--tarjeta); padding: 15px; border-radius: 12px; 
+  align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 25px;
+}
+.entry-form select, .entry-form input {
+  flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--borde); background: var(--tarjeta); color: var(--texto);
+}
+.entry-btn { background: #4f46e5; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; white-space: nowrap; }
+
+/* TABLAS */
+.section-box { background: var(--tarjeta); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--borde); color: #64748b; }
+.data-table td { padding: 12px; border-bottom: 1px solid var(--borde); }
+
+/* PANTALLA DE BLOQUEO */
+.lock-screen { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+:root {
+  --bg: #f4f7fe;
+  --card: #ffffff;
+  --text: #1e293b;
+}
+
+/* MODO OSCURO ACTIVO */
+body.dark-mode {
+  --bg: #0b0f1a;
+  --card: #161b22;
+  --text: #ffffff;
+}
+
+body { background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; font-family: sans-serif; }
+
+.main-container { padding: 20px; max-width: 1200px; margin: auto; }
+
+/* BOTÓN LUNA */
+.moon-btn {
+  background: var(--card);
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 45px; height: 45px;
+  cursor: pointer; font-size: 20px;
+}
+
+/* TARJETAS IGUALES A CAPTURA */
+.grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+.card { background: var(--card); padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+.card.in { border-top: 5px solid #10b981; }
+.card.ex { border-top: 5px solid #ef4444; }
+.card.ba { border-top: 5px solid #3b82f6; }
+
+/* FORMULARIO EQUITATIVO */
+.form-row {
+  display: flex; gap: 10px; background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 20px;
+}
+.form-row input, .form-row select {
+  flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text);
+}
+.btn-save { background: #4f46e5; color: white; border: none; padding: 0 25px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+/* TABLAS */
+.table-section { background: var(--card); padding: 20px; border-radius: 12px; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 12px; border-bottom: 2px solid #eee; color: #64748b; }
+td { padding: 12px; border-bottom: 1px solid #eee; }
+
+/* LOGIN OSCURECIDO */
+.login-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999;
+}
 .main-app {
   background: #f4f7fe;
   min-height: 100vh;
