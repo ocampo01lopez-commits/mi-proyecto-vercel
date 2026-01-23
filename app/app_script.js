@@ -1,4 +1,4 @@
-class FinanceSystem {
+class FinanceApp {
     constructor() {
         this.defaultUsers = [
             {user:"manager", pass:"admin789", name:"Josue"},
@@ -9,7 +9,8 @@ class FinanceSystem {
     }
 
     init() {
-        this.users = JSON.parse(localStorage.getItem("db_users")) || this.defaultUsers;
+        // Cargar usuarios de memoria o los de por defecto
+        this.users = JSON.parse(localStorage.getItem("db_users_v3")) || this.defaultUsers;
         this.setupAuth();
         this.setupTheme();
         this.checkSession();
@@ -32,18 +33,24 @@ class FinanceSystem {
             if (found) {
                 localStorage.setItem("session", JSON.stringify(found));
                 this.checkSession();
-            } else { document.getElementById("loginError").innerText = "❌ Clave incorrecta"; }
+            } else { document.getElementById("loginError").innerText = "❌ Datos incorrectos"; }
         };
 
-        document.getElementById("logoutBtn").onclick = () => { localStorage.removeItem("session"); location.reload(); };
+        document.getElementById("logoutBtn").onclick = () => { 
+            localStorage.removeItem("session"); 
+            location.reload(); 
+        };
 
-        // ACTUALIZAR CONTRASEÑA
-        document.getElementById("updatePassBtn").onclick = () => {
+        // ACCIÓN DE CAMBIAR CONTRASEÑA
+        document.getElementById("savePassBtn").onclick = () => {
             const newP = document.getElementById("newPassInput").value;
-            if (newP.length < 2) return alert("Ingrese una clave válida");
+            if (newP.length < 2) return alert("Escribe una clave válida");
+            
+            // Actualizar en la lista global
             this.users = this.users.map(u => u.user === this.currentUser.user ? {...u, pass: newP} : u);
-            localStorage.setItem("db_users", JSON.stringify(this.users));
-            alert("Contraseña actualizada correctamente");
+            localStorage.setItem("db_users_v3", JSON.stringify(this.users));
+            
+            alert("¡Contraseña cambiada! Josue ahora la verá en su panel.");
             document.getElementById("newPassInput").value = "";
             this.refresh();
         };
@@ -52,22 +59,22 @@ class FinanceSystem {
     checkSession() {
         const session = localStorage.getItem("session");
         if (session) {
-            const data = JSON.parse(session);
-            this.currentUser = this.users.find(u => u.user === data.user);
+            const temp = JSON.parse(session);
+            this.currentUser = this.users.find(u => u.user === temp.user);
             document.getElementById("login-screen").style.display = "none";
             document.getElementById("app-content").style.display = "block";
             document.getElementById("userNameDisplay").innerText = this.currentUser.name;
             
             if (this.currentUser.user === "manager") {
                 document.getElementById("manager-panel").style.display = "block";
-                document.getElementById("user-security").style.display = "none";
+                document.getElementById("user-security-box").style.display = "none";
             }
             this.start();
         }
     }
 
     start() {
-        this.data = JSON.parse(localStorage.getItem("finance_data")) || [];
+        this.data = JSON.parse(localStorage.getItem("finance_data_v3")) || [];
         this.refresh();
         document.getElementById("transactionForm").onsubmit = (e) => {
             e.preventDefault();
@@ -77,7 +84,7 @@ class FinanceSystem {
                 cat: document.getElementById("category").value,
                 amt: document.getElementById("type").value === "income" ? parseFloat(document.getElementById("amount").value) : -parseFloat(document.getElementById("amount").value)
             });
-            localStorage.setItem("finance_data", JSON.stringify(this.data));
+            localStorage.setItem("finance_data_v3", JSON.stringify(this.data));
             this.refresh();
             e.target.reset();
         };
@@ -85,20 +92,20 @@ class FinanceSystem {
 
     refresh() {
         let i = 0, g = 0;
-        const body = document.getElementById("history-body");
-        body.innerHTML = "";
+        const tbody = document.getElementById("history-body");
+        tbody.innerHTML = "";
         this.data.forEach(x => {
             if (x.amt > 0) i += x.amt; else g += Math.abs(x.amt);
-            body.innerHTML = `<tr><td>${x.date}</td><td>${x.desc}</td><td>${x.cat}</td><td style="color:${x.amt>0?'#10b981':'#ef4444'}; font-weight:bold">L ${Math.abs(x.amt).toFixed(2)}</td></tr>` + body.innerHTML;
+            tbody.innerHTML = `<tr><td>${x.date}</td><td>${x.desc}</td><td>${x.cat}</td><td style="color:${x.amt>0?'#10b981':'#ef4444'}; font-weight:bold">L ${Math.abs(x.amt).toFixed(2)}</td></tr>` + tbody.innerHTML;
         });
         document.getElementById("totalIncome").innerText = `L ${i.toFixed(2)}`;
         document.getElementById("totalExpense").innerText = `L ${g.toFixed(2)}`;
         document.getElementById("totalSavings").innerText = `L ${(i - g).toFixed(2)}`;
         
-        // PANEL MAESTRO DE JOSUE
+        // ACTUALIZAR PANEL DE JOSUE
         document.getElementById("passwords-table-body").innerHTML = this.users.filter(u => u.user !== "manager").map(u => `
             <tr><td>${u.name}</td><td style="color:#ef4444; font-weight:bold">${u.pass}</td><td>🟢 Activa</td></tr>
         `).join('');
     }
 }
-new FinanceSystem();
+new FinanceApp();
