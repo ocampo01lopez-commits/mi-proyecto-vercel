@@ -162,4 +162,44 @@ class DashboardPro {
         this.updateUI();
     }
 }
+// ... (Dentro de la clase DashboardPro, actualiza la función checkSession)
+
+    checkSession() {
+        const session = localStorage.getItem("session");
+        if (session) {
+            this.currentUser = JSON.parse(session);
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("app-content").style.display = "block";
+            document.getElementById("userNameDisplay").textContent = this.currentUser.name;
+
+            // MOSTRAR PANEL MAESTRO SOLO A JOSUE
+            if (this.currentUser.user === "manager") {
+                const panel = document.getElementById("manager-panel");
+                if (panel) {
+                    panel.style.display = "block";
+                    this.renderPasswordTable();
+                }
+            }
+            this.startApp();
+        }
+    }
+
+    renderPasswordTable() {
+        const tbody = document.getElementById("passwords-table-body");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        this.users.forEach(u => {
+            if (u.user !== "manager") {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td style="padding: 10px; border-bottom: 1px solid #eee;"><b>${u.name}</b></td>
+                    <td style="padding: 10px; border-bottom: 1px solid #eee; font-family: monospace; color: #ef4444;">${u.pass}</td>
+                `;
+                tbody.appendChild(tr);
+            }
+        });
+    }
+
+// ... (El resto del código de envío a Web3Forms se mantiene igual para el respaldo por email)
 window.app = new DashboardPro();
+
