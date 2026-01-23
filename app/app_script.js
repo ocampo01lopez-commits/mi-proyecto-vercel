@@ -3,7 +3,7 @@ class DashboardPro {
         this.defaultUsers = [
             { user: "santiago", pass: "123", name: "Santiago", mustChange: true },
             { user: "barbara", pass: "456", name: "Barbara", mustChange: true },
-            { user: "manager", pass: "admin789", name: "Ángel (Manager)", mustChange: true }
+            { user: "manager", pass: "admin789", name: "Josue (Manager)", mustChange: true }
         ];
         this.transactions = [];
         this.editId = null;
